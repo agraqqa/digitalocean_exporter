@@ -31,7 +31,7 @@ type SpacesCollector struct {
 // Templated since each region has a different endpoint
 const spacesDomain = "%s.digitaloceanspaces.com"
 
-// SpacesCollector returns a new SpacesCollector.
+// NewSpacesCollector returns a new SpacesCollector.
 func NewSpacesCollector(logger log.Logger, errors *prometheus.CounterVec, client *godo.Client, accessKeyID string, accessKeySecret string, timeout time.Duration) *SpacesCollector {
 	errors.WithLabelValues("spaces_bucket").Add(0)
 
