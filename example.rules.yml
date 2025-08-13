@@ -40,3 +40,9 @@ groups:
     annotations:
       description: We can't find SSH keys, please add at least one.
       summary: No SSH Keys.
+  - alert: registry_storage_usage_high
+    expr: (digitalocean_registry_storage_usage_bytes / digitalocean_registry_included_storage_bytes) * 100 > 95
+    for: 10m
+    annotations:
+      description: Container registry {{ $labels.registry_name }} is using {{ $value | humanizePercentage }} of allocated storage. Consider cleaning up unused images or upgrading your plan.
+      summary: Registry storage usage is above 95%.
