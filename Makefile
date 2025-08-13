@@ -37,6 +37,43 @@ lint:
 test:
 	@for PKG in $(PACKAGES); do $(GO) test -cover $$PKG || exit 1; done;
 
+.PHONY: test-short
+test-short:
+	$(GO) test -v -short ./...
+
+.PHONY: test-coverage
+test-coverage:
+	$(GO) test -race -coverprofile=coverage.out -covermode=atomic ./...
+	$(GO) tool cover -html=coverage.out -o coverage.html
+	@echo "Coverage report generated: coverage.html"
+
+.PHONY: test-integration
+test-integration:
+	$(GO) test -v -run TestIntegration ./...
+
+.PHONY: docker-build
+docker-build: build
+	docker build -t $(IMAGE):latest .
+
+.PHONY: podman-build
+podman-build: build
+	podman build -t $(IMAGE):latest .
+
+.PHONY: help
+help:
+	@echo "Available targets:"
+	@echo "  build          - Build the binary"
+	@echo "  test           - Run all tests"
+	@echo "  test-short     - Run tests excluding integration tests"
+	@echo "  test-coverage  - Run tests with coverage report"
+	@echo "  test-integration - Run only integration tests"
+	@echo "  lint           - Run linter"
+	@echo "  fmt            - Format code"
+	@echo "  vet            - Run go vet"
+	@echo "  clean          - Clean build artifacts"
+	@echo "  docker-build   - Build Docker image"
+	@echo "  podman-build   - Build Podman image"
+
 $(EXECUTABLE): $(wildcard *.go)
 	$(GO) build -v -ldflags '-w $(LDFLAGS)'
 
