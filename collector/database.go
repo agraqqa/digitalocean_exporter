@@ -102,6 +102,7 @@ func (c *DBCollector) Collect(ch chan<- prometheus.Metric) {
 				"msg", "can't read current page",
 				"err", err,
 			)
+			return
 		}
 
 		opt.Page = page + 1

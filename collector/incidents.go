@@ -105,6 +105,7 @@ func (c *IncidentCollector) Collect(ch chan<- prometheus.Metric) {
 			"msg", "can't retrieve incidents",
 			"err", err,
 		)
+		return
 	}
 	// Count all incidents per region
 	for _, incident := range doStatus.Incidents {
